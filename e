@@ -41,6 +41,7 @@ if (!localStorage.saveSettings) localStorage.saveSettings = JSON.stringify({
     maps: '',
     customGames: false,
     cssLink: '',
+    skinlink: ",
     menuOpen: true,
     volume: 1,
     noKillSound: false,
@@ -54,6 +55,7 @@ const settings = new Store(localStorage.saveSettings);
 let permCrosshair = !!settings.get('permCrosshair');
 let noLoadingTimes = true;
 let customCss = !!settings.get('customCss');
+let customSkinLink = !!settings.get('customSkinLink);
 //let hpNumber = true;
 let hideWeaponsAds = !!settings.get('hideWeaponsAds');
 let hideArms = !!settings.get('hideArms');
@@ -386,6 +388,12 @@ if (customCss) {
     cssLinkElem.href = settings.get('cssLink');
     cssLinkElem.rel = "stylesheet";
     document.head.append(cssLinkElem);
+    
+    if (customSkin) {
+    let skinLinkElem = document.createElement("link");
+    skinLinkElem.href = settings.get('skinLink');
+    skinLinkElem.rel = "stylesheet";
+    document.head.append(skinLinkElem);
 }
 
 gui.id = "gui";
@@ -466,6 +474,12 @@ gui.innerHTML += "<style>\n" +
     "        <input type=\"checkbox\" id=\"customCSS\" name=\"customCSS\">\n" +
     "        <label for=\"customCSS\">CSS Link: </label>\n" +
     "        <input type=\"text\" id=\"cssLink\" placeholder=\"Paste CSS Link Here\">\n" +
+    "    </div>\n" +
+    "\n" +
+    "    <div class=\"module\">\n" +
+    "        <input type=\"checkbox\" id=\"customskin\" name=\"customskin\">\n" +
+    "        <label for=\"customskin\">skin Link: </label>\n" +
+    "        <input type=\"text\" id=\"skinLink\" placeholder=\"Paste Skin Link Here\">\n" +
     "    </div>\n" +
     "\n" +
     "    <div class=\"module\">\n" +
@@ -635,6 +649,10 @@ gui.onclick = (e) => {
     if (e.target.id === "customCSS") {
         customCss = e.target.checked;
         settings.set('customCss', customCss);
+     }
+            if (e.target.id === "customskin") {
+        customSkin = e.target.checked;
+        settings.set('customSkin', customSkin);
     }
 
     if (e.target.id === "hideweap") {
@@ -779,6 +797,17 @@ cssField.value = settings.get('cssLink');
 
 cssField.oninput = () => {
     settings.set('cssLink', cssField.value);
+    
+document.getElementById("customskin").checked = customSkin;
+
+const skinField = document.getElementById('skinLink');
+
+if (settings.get('skinLink') === undefined) settings.set('skinLink', '');
+
+skinField.value = settings.get('skinLink');
+
+skinField.oninput = () => {
+    settings.set('skinLink', skinField.value);
 }
 
 document.getElementById("hideweap").checked = hideWeaponsAds;
